@@ -26,7 +26,6 @@ S3_URL=
 
 Host keys are stored in `/etc/ssh/keys`, use a volume to persist them between containers.
 
-
 ```yaml
 version: "3"
 
@@ -43,3 +42,7 @@ services:
       - ./keys/:/etc/ssh/keys
 ```
 
+
+## Example
+
+An example is provided in `docker-compose.yml` and `config/`.
