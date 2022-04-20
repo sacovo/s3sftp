@@ -30,6 +30,9 @@ create_user() {
     useradd --password="$pass" --create-home --uid "$uid"  --non-unique "$user"
   fi
 
+  chown root:root "/home/$user"
+  chmod 0755 "/home/$user"
+
 }
 
 read_users() {
