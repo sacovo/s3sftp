@@ -2,17 +2,17 @@ version: '3'
 
 services:
   sftp:
-    image: ghcr.io/sacovo/s3sftp:main
+    build: .
     ports:
       - "8765:22"
     volumes:
       - ./config/users.conf:/etc/s3sftp/users.conf
       - ./config/buckets.conf:/etc/s3sftp/buckets.conf
-      - ./keys/:/etc/ssh/keys
+      - ./config/keys/:/etc/ssh/keys
     environment:
-      - ACCESS_KEY=your-access-key
-      - SECRET_KEY=secret-key
-      - S3_URL=https://s3-access-point.io
+      - ACCESS_KEY=$ACCESS_KEY
+      - SECRET_KEY=$SECRET_KEY
+      - S3_URL=$S3_URL
     # Those are necessary for fuse to mount inside the container
     cap_add:
       - SYS_ADMIN

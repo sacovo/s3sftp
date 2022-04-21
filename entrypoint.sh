@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/bash -x
+
+export AWS_SHARED_CREDENTIALS_FILE=/.aws-credentials
 
 mount_bucket() {
   bucket_name=$1
@@ -14,7 +16,8 @@ mount_bucket() {
 
   mkdir -p "$mount_point"
 
-  s3fs "$bucket_name" "$mount_point" -o allow_other -o uid="$uid" -o gid="$gid"  -o url="$S3_URL" -o passwd_file="$PASSWD_FILE" -o use_path_request_style
+  goofys --uid="$uid" --gid="$gid" --endpoint="$S3_URL" -o allow_other "$bucket_name" "$mount_point"
+
 }
 
 create_user() {
@@ -66,11 +69,7 @@ generate_keys() {
   fi
 }
 
-
-PASSWD_FILE="${PASSWD_FILE:-/etc/s3fs_passwd}"
-
-echo "$ACCESS_KEY:$SECRET_KEY" > "$PASSWD_FILE"
-chmod 600 "$PASSWD_FILE"
+printf '[default]\naws_access_key_id = %s\naws_secret_access_key = %s\n' "$ACCESS_KEY" "$SECRET_KEY" > "$AWS_SHARED_CREDENTIALS_FILE"
 
 generate_keys
 read_users
